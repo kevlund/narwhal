@@ -2,7 +2,7 @@
 setlocal
 
 :: NARWHAL_HOME is the parent of the bin directory
-set NARWHAL_HOME=%~dp0..
+set NARWHAL_HOME=C:\Narwhal\narwhal
 
 :: use Rhino as the default if none is specified in narwhal.conf
 set NARWHAL_DEFAULT_ENGINE=rhino
@@ -27,7 +27,10 @@ set EXECUTABLE_NAME=narwhal-%NARWHAL_ENGINE%.cmd
 if exist "%NARWHAL_HOME%\engines\%NARWHAL_ENGINE%." (
 	set NARWHAL_ENGINE_HOME=%NARWHAL_HOME%\engines\%NARWHAL_ENGINE%
 ) else (
-	echo Can't find executable for %NARWHAL_ENGINE%
+	echo narwhal home: %NARWHAL_HOME% 
+	echo engine home: %NARWHAL_ENGINE_HOME% 
+	echo Can't find exe for %NARWHAL_ENGINE% 
+	echo of narwhal-%NARWHAL_ENGINE%.cmd
 	exit /b 1
 )
 

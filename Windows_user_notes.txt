@@ -1,0 +1,63 @@
+Getting tusk to run correctly on windows was a bit frustrating, I did however find a fix so I can now install jake build cappuccino ect  ect.
+
+The fix involved copying narwhal.cmd, narwhal-rhino.cmd, and tusk.cmd into the system 32 folder (from the correct paths), so they can be seen, and modifying the narwhal.cmd script to point to the right directory.
+
+
+
+The error I was getting on tusk calls in command:
+
+cant find executable for rhino
+
+(I tried various installs, numerous path changes, file moving inclusions ect to try and get a working combination of files, but it just didnt work, so it became clear this issue had to be related to the actual tusk.cmd)
+
+So I dug into the tusk.cmd script and made sure I know what path it is actually pointing to before assuming
+
+Then I went into the narwahl.cmd script. 
+
+This is because rhino is within narwhal, in order for rhino to run, it needs to go thru here 1st.
+
+So I check these paths in narwhal.cmd
+
+Here is where I found that narwhal wants to connect to another command script.
+
+the script declared that NARWHAL_ENGINE=rhino
+
+set EXECUTABLE_NAME=narwhal-%NARWHAL_ENGINE%.cmd
+
+So ofc we want to make sure it sees" narwhal-rhino.cmd" ^
+
+narwhal-rhino.cmd is the script we want to run for the rhino.exe
+
+But since we cant find it...we need to see why.
+
+add all the parameters to the echo on error. ex:
+
+	echo narwhal home: %NARWHAL_HOME% 
+	echo engine home: %NARWHAL_ENGINE_HOME% 
+	echo Can't find exe for %NARWHAL_ENGINE% 
+	echo of narwhal-%NARWHAL_ENGINE%.cmd
+	exit /b 1
+
+copy this new narwhal.cmd into C:/windows/system32
+
+run tusk at command, now all of the parameters should be listed.
+
+In my case narwhal.cmd had this:
+narwhal home: C:\Windows\System32    ----this isnt right 
+		-we want to point this script to the parent of the narwhal bin directory
+engine home:                                                   ---and ofc this wont work either becuase of the path
+cant find exe for rhino
+of narwhal-rhino.cmd
+
+
+so I changed  NARWHAL_HOME to my narwhal parent directory ( the one above the bin dir /  in my case it was....)
+set NARWHAL_HOME=C:\Narwhal\narwhal
+
+
+and now jake works on my xp machine.
+
+
+
+
+
+
